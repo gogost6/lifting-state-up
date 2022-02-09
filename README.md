@@ -1,3 +1,8 @@
+## Project is inspired by https://reactjs.org/docs/lifting-state-up.html
+
+I implemented it with functional components and the main purpose is
+to add tests.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
