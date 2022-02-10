@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { screen } from '@testing-library/react';
+
 import { getPeople } from '../../services/starWars/info';
 import StarWars from './StarWars';
 
@@ -90,25 +90,29 @@ const actors = [
         "url": "https://swapi.dev/api/people/3/"
     }];
 
-global.fetch = jest.fn(() => Promise.resolve({
-    json: () => {
-        Promise.resolve({
-            url: "https://swapi.dev/api/people",
-            value: actors
-        })
-    }
-}))
+jest.mock('../../services/starWars/info');
+// global.fetch = jest.fn(() => Promise.resolve({
+//     json: () => {
+//         Promise.resolve({
+//             url: "https://swapi.dev/api/people",
+//             value: actors
+//         })
+//     }
+// }))
 
 
 describe('Star Wars API', () => {
     let container = null;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         container = document.createElement("div");
         document.body.appendChild(container);
-
-        act(() => {
-            render(<StarWars />, container);
+        
+        await act(async () => {
+            getPeople.mockResolvedValue({
+                results: actors
+            })
+            await render(<StarWars />, container);
         });
     });
 
@@ -121,11 +125,13 @@ describe('Star Wars API', () => {
 
     it('should fetch people', () => {
         getPeople().then(data => expect(data.results).toHaveLength(3));
-        getPeople().then(data => expect(data).toEqual(actors));
-        getPeople().then(data => expect(data[0].name).toEqual("Luke Skywalker"));
+        getPeople().then(data => expect(data.results).toEqual(actors));
+        getPeople().then(data => expect(data.results[0].name).toEqual("Luke Skywalker"));
     });
 
     it('should render people', () => {
         expect(screen.getByText('Luke Skywalker')).toBeInTheDocument();
+        expect(screen.getByText('C-3PO')).toBeInTheDocument();
+        expect(screen.getByText('R2-D2')).toBeInTheDocument();
     })
 })

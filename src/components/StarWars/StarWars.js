@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { getPeople } from '../../services/starWars/info';
 
 const StarWars = () => {
     const [people, setPeople] = useState([]);
-    const [error, setError] = useState('')
+    const [error, setError] = useState('');
 
     useEffect(() => {
         getPeople()
