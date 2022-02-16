@@ -1,6 +1,6 @@
-import { render, unmountComponentAtNode } from "react-dom";
+import { unmountComponentAtNode } from "react-dom";
+import { render, fireEvent, screen } from '../../test-utils'
 import { act } from "react-dom/test-utils";
-import { screen } from '@testing-library/react';
 
 import { getPeople } from '../../services/starWars/info';
 import StarWars from './StarWars';
